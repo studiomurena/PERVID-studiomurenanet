@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>studiomurena.net</title>
     <style>
         /* Font Pixel stile BIOS/DOS per i testi normali */
@@ -25,7 +25,7 @@
 
         body {
             margin: 0; padding: 0;
-            height: 100vh; height: 100dvh;
+            height: 100vh;
             background-color: #000;
             font-family: 'VGA 437', monospace;
             user-select: none;
@@ -47,13 +47,14 @@
             box-shadow: inset 1px 1px 0 var(--win-dark);
         }
 
-        .ig-stories-poster {
-            height: 100%; width: 100vw; max-width: 600px;
+        /* Trasformato per occupare tutto lo schermo desktop (rimosso max-width: 600px) */
+        .windows-desktop {
+            height: 100%; width: 100vw; 
             background-color: var(--teal); display: flex; flex-direction: column;
             position: relative; overflow: hidden;
         }
 
-        .ig-stories-poster::after {
+        .windows-desktop::after {
             content: " "; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.04) 50%);
             background-size: 100% 4px; z-index: 1000; pointer-events: none;
@@ -62,23 +63,23 @@
         /* --- DESKTOP --- */
         .desktop { flex-grow: 1; position: relative; z-index: 10; }
         
-        /* Modifica dimensioni icone x2 */
         .desktop-icon {
-            position: absolute; width: 160px; text-align: center; color: white; font-size: 24px;
+            position: absolute; width: 120px; text-align: center; color: white; font-size: 16px;
             cursor: pointer; text-shadow: 2px 2px #000; padding: 10px; z-index: 20;
         }
         .desktop-icon:active { background: rgba(255,255,255,0.2); border: 2px dotted white; }
-        .icon-art { font-size: 72px; display: block; margin-bottom: 10px; pointer-events: none; }
+        .icon-art { font-size: 48px; display: block; margin-bottom: 8px; pointer-events: none; }
 
-        /* Coordinate adattate per le nuove icone giganti */
+        /* Nuove coordinate per layout Desktop esteso */
         #icon-internet { top: 20px; left: 20px; }
-        #icon-jazzcore { top: 160px; left: 20px; }
-        #icon-cestino { top: 300px; left: 20px; }
-        #icon-game { top: 440px; left: 20px; } 
+        #icon-jazzcore { top: 140px; left: 20px; }
+        #icon-cestino { top: 260px; left: 20px; }
+        #icon-game { top: 380px; left: 20px; } 
         
-        #icon-fighter { top: 20px; left: 200px; }
-        #icon-merch { top: 160px; left: 200px; }
-        #icon-tickets { top: 300px; left: 200px; }
+        #icon-ospiti { top: 20px; left: 160px; }
+        #icon-fighter { top: 140px; left: 160px; }
+        #icon-merch { top: 260px; left: 160px; }
+        #icon-tickets { top: 380px; left: 160px; }
 
         .title-bar {
             background: var(--win-blue); color: white; padding: 3px 8px;
@@ -90,6 +91,14 @@
             color: black; font-weight: bold; padding: 0 4px; font-size: 11px; cursor: pointer;
         }
 
+        .popup { position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); display: flex; flex-direction: column; }
+
+        /* Stile Cartella Ospiti */
+        .folder-file { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; padding: 5px; border: 1px dotted transparent; }
+        .folder-file:active { border-color: var(--win-border-dark); background: #e0e0e0; }
+        .folder-file img { width: 48px; height: 48px; image-rendering: pixelated; margin-bottom: 5px; }
+        .folder-file span { font-size: 11px; color: var(--win-dark); word-break: break-word; line-height: 1.2; font-family: 'MS Sans Serif', Tahoma, sans-serif; font-weight: bold;}
+
         #dialup-window {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; z-index: 200;
         }
@@ -97,8 +106,8 @@
 
         /* --- BROWSER INTERNET --- */
         #browser-window {
-            display: none; position: absolute; top: 0; left: 0; 
-            width: 100%; height: 100%; z-index: 50; flex-direction: column;
+            display: none; position: absolute; top: 5%; left: 20%; 
+            width: 70%; height: 85%; z-index: 50; flex-direction: column;
         }
         .browser-toolbar { padding: 4px; border-bottom: 2px solid var(--win-border-dark); font-size: 12px; }
 
@@ -110,88 +119,70 @@
 
         /* --- SEZIONE ALTA (HEADER) --- */
         .main-title {
-            flex-shrink: 0; 
-            margin: 10px auto; 
-            width: 100%; 
+            flex-shrink: 0; margin: 10px auto; width: 100%; 
             display: flex; justify-content: center; align-items: center;
-            font-family: 'Press Start 2P', monospace; 
-            font-size: 11vw; 
-            text-transform: lowercase; 
-            white-space: nowrap; 
-            letter-spacing: -2px;
+            font-family: 'Press Start 2P', monospace; font-size: 4vw; text-transform: lowercase; 
+            white-space: nowrap; letter-spacing: -2px;
             animation: colorCycleText 2s infinite alternate;
         }
 
         @keyframes colorCycleText { 
-            0% { color: #000080; } 
-            50% { color: #008080; } 
-            100% { color: #000000; } 
+            0% { color: #000080; } 50% { color: #008080; } 100% { color: #000000; } 
         }
 
         .marquee-box {
             flex-shrink: 0; background: #000; color: #00ff00; padding: 2px; border: 2px solid #555; width: 100%;
             overflow: hidden; white-space: nowrap; margin-bottom: 4px; box-shadow: inset 2px 2px 0 #000;
         }
-        .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 10s linear infinite; font-size: 12px; }
+        .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 10s linear infinite; font-size: 14px; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         /* IMPAGINAZIONE BOX EVENTO */
         .huge-event-box {
-            flex-shrink: 0; background: #000; color: #fff; padding: 6px; margin-bottom: 4px; width: 100%;
+            flex-shrink: 0; background: #000; color: #fff; padding: 10px; margin-bottom: 10px; width: 100%;
             border: 4px solid #fff; box-shadow: 4px 4px 0 var(--win-blue);
             display: flex; flex-direction: row; align-items: center; justify-content: space-evenly;
         }
-        .event-left {
-            font-size: min(5vw, 18px); color: #00ff00; letter-spacing: -1px; white-space: nowrap;
-        }
-        .event-divider {
-            width: 2px; height: 20px; background-color: #808080;
-        }
-        .event-right {
-            font-size: min(5.5vw, 20px); color: #ffcc00; letter-spacing: -1px; white-space: nowrap; font-weight: bold;
-        }
+        .event-left { font-size: min(3vw, 24px); color: #00ff00; letter-spacing: -1px; white-space: nowrap; }
+        .event-divider { width: 2px; height: 30px; background-color: #808080; }
+        .event-right { font-size: min(3.5vw, 28px); color: #ffcc00; letter-spacing: -1px; white-space: nowrap; font-weight: bold; }
 
         /* --- WORKSPACE --- */
         .workspace {
-            flex-grow: 1; min-height: 0; display: grid; gap: 2px; width: 100%;
+            flex-grow: 1; min-height: 0; display: grid; gap: 4px; width: 100%;
             grid-template-columns: 1fr 1fr; grid-template-rows: auto auto minmax(0, 1fr); 
         }
 
-        .popup { position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); display: flex; flex-direction: column; }
-
-        /* GRIGLIA ARTISTI (Ora occupa tutta la larghezza in alto) */
+        /* GRIGLIA ARTISTI SITO */
         #artists-window { grid-column: 1 / -1; z-index: 105; }
         .artist-grid {
-            background: var(--win-light); padding: 1px; flex-grow: 1;
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
-            overflow-y: auto; max-height: 250px;
+            background: var(--win-light); padding: 2px; flex-grow: 1;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 2px;
+            overflow-y: auto; max-height: 350px;
         }
         .artist-item {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 1px; border: 1px dotted transparent; cursor: pointer; text-align: center;
+            padding: 4px; border: 1px dotted transparent; cursor: pointer; text-align: center;
         }
         .artist-item:active { border: 1px dotted #808080; background: #e0e0e0; }
 
         .static-face {
-            width: 48px; height: 48px; margin-bottom: 1px; image-rendering: pixelated;
+            width: 48px; height: 48px; margin-bottom: 2px; image-rendering: pixelated;
             background-color: transparent; background-size: contain; 
             background-position: center; background-repeat: no-repeat;
         }
         .silhouette { filter: brightness(0); }
-        .artist-name { color: var(--win-blue); text-decoration: underline; font-size: 10px; font-weight: bold; line-height: 1; }
-        .custom-icon { width: 28px; height: 28px; image-rendering: pixelated; object-fit: contain; margin-bottom: 1px; }
+        .artist-name { color: var(--win-blue); text-decoration: underline; font-size: 11px; font-weight: bold; line-height: 1.2; }
+        .custom-icon { width: 32px; height: 32px; image-rendering: pixelated; object-fit: contain; margin-bottom: 2px; }
 
         /* POP-UP PICCOLI E NUOVO LAYOUT */
         .mini-popup-content {
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 2px; gap: 1px; flex-grow: 1; text-align: center;
+            padding: 4px; gap: 2px; flex-grow: 1; text-align: center;
         }
-        .mini-popup-text { font-size: 9px; font-weight: bold; line-height: 1.1; }
+        .mini-popup-text { font-size: 11px; font-weight: bold; line-height: 1.2; }
 
-        /* FINESTRA LOADING: Ora a larghezza intera e si piazza sotto la griglia artisti */
         #loading-window { grid-column: 1 / -1; z-index: 103; }
-        
-        /* WARNING e INFO: Ora affiancati in fondo */
         #warning-window { grid-column: 1; z-index: 102; animation: glitch 4s infinite; }
         #reveal-window { grid-column: 2; z-index: 106; }
 
@@ -203,14 +194,14 @@
             98% { transform: scale(1.02); filter: blur(1px); } 100% { transform: scale(1); filter: none; }
         }
 
-        .progress-bar-container { width: 100%; height: 6px; margin: 2px 0; }
+        .progress-bar-container { width: 100%; height: 10px; margin: 4px 0; }
         .progress-bar-fill { height: 100%; background: var(--win-blue); width: 0%; animation: loading 4s infinite; }
         @keyframes loading { 0% { width: 0%; } 50% { width: 45%; } 100% { width: 45%; } }
 
-        /* --- FINESTRA GIOCO (MURENA SLOT) --- */
-        #game-window {
+        /* --- FINESTRE DI GIOCO / CESTINO --- */
+        #game-window, #trash-window {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 90%; max-width: 400px; z-index: 400; background: var(--win-gray);
+            width: 400px; z-index: 400; background: var(--win-gray);
         }
         .game-content { padding: 15px; text-align: center; display: flex; flex-direction: column; align-items: center; }
         
@@ -235,9 +226,7 @@
         .btn-game:active { border-color: #808080 #fff #fff #808080; }
 
         /* --- EFFETTO GLITCH BUFFON --- */
-        .buffon-glitch {
-            animation: buffonFlash 0.15s infinite alternate, buffonShake 0.3s infinite;
-        }
+        .buffon-glitch { animation: buffonFlash 0.15s infinite alternate, buffonShake 0.3s infinite; }
         @keyframes buffonFlash {
             0% { filter: invert(0) drop-shadow(0 0 0 red); }
             50% { filter: invert(0.8) drop-shadow(5px 5px 0 magenta) hue-rotate(180deg); }
@@ -276,13 +265,13 @@
 </head>
 <body>
 
-    <div class="ig-stories-poster">
+    <div class="windows-desktop">
         
         <div class="desktop" id="desktop-area">
             <div class="desktop-icon" id="icon-internet" onclick="if(!isGlobalDragging) startDialUp()">
                 <span class="icon-art">🌐</span>Network
             </div>
-            <div class="desktop-icon" id="icon-jazzcore" onclick="if(!isGlobalDragging) window.open('https://www.otrlive.it/tour-dates/jazzhighlanders-summer-2k26/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAdGRleARxDwtleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAafX1SSjT_MfaJBPd98myzzAB1MRVcPvZawMqJsaO94MxMH5Cpx7WV8WiSioMg_aem_mc4XD_F68LSVMjeSDHarcA', '_blank')">
+            <div class="desktop-icon" id="icon-jazzcore" onclick="if(!isGlobalDragging) window.open('https://www.otrlive.it/tour-dates/jazzhighlanders-summer-2k26/', '_blank')">
                 <span class="icon-art">💿</span>Jazzcore
             </div>
             <div class="desktop-icon" id="icon-cestino" onclick="if(!isGlobalDragging) openTrashWindow(false)">
@@ -291,6 +280,11 @@
             <div class="desktop-icon" id="icon-game" style="display: none;" onclick="if(!isGlobalDragging) openGame()">
                 <span class="icon-art">🎰</span>Murena Slot
             </div>
+
+            <div class="desktop-icon" id="icon-ospiti" onclick="if(!isGlobalDragging) openOspiti()">
+                <span class="icon-art">📁</span>Ospiti
+            </div>
+
             <div class="desktop-icon" id="icon-fighter" onclick="if(!isGlobalDragging) window.location.href='fighter.html'">
                 <span class="icon-art">🕹️</span>Fighter
             </div>
@@ -301,6 +295,53 @@
                 <span class="icon-art">🎟️</span>Tickets
             </div>
 
+            <div id="ospiti-window" class="win95-border popup" style="display:none; position:absolute; top: 15%; left: 30%; width: 550px; z-index: 250;" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
+                <div class="title-bar drag-handle">
+                    <span>C:\WINDOWS\Desktop\OSPITI</span>
+                    <span class="btn-close" onclick="closeWindow('ospiti-window')">X</span>
+                </div>
+                <div class="win95-border-inset" style="background: #fff; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; max-height: 400px; overflow-y: auto; margin: 4px;">
+                    
+                    <div class="folder-file">
+                        <img src="assets/face-arya.png" alt="Arya">
+                        <span>ARYA</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-carlocorallo.png" alt="Carlo Corallo">
+                        <span>CARLO CORALLO</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-daykoda-sala.png" alt="Daykoda & Riccardo Sala">
+                        <span>DAYKODA &<br>R. SALA</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-silentbob.png" alt="Silent Bob">
+                        <span>SILENT BOB</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-jackthesmoker.png" alt="Jack The Smoker">
+                        <span>JACK THE SMOKER</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-sickbudd.png" alt="Sick Budd">
+                        <span>SICK BUDD</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-enricogabrielli.png" alt="Enrico Gabrielli">
+                        <span>ENRICO GABRIELLI</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-freshmula.png" alt="Fresh Mula">
+                        <span>FRESH MULA</span>
+                    </div>
+                    <div class="folder-file">
+                        <img src="assets/face-dutchnazari.png" alt="Dutch Nazari">
+                        <span>DUTCH NAZARI</span>
+                    </div>
+
+                </div>
+            </div>
+
             <div id="dialup-window" class="win95-border popup" style="position:absolute;">
                 <div class="title-bar"><span>Connecting...</span></div>
                 <div class="dialup-content">
@@ -309,7 +350,7 @@
                 </div>
             </div>
 
-            <div id="trash-window" class="win95-border popup" style="display:none; position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; z-index: 300;">
+            <div id="trash-window" class="win95-border popup">
                 <div class="title-bar drag-handle">
                     <span>Recycle Bin</span>
                     <span class="btn-close" onclick="closeWindow('trash-window')">X</span>
@@ -319,7 +360,7 @@
                 </div>
             </div>
 
-            <div id="game-window" class="win95-border popup" style="position:absolute;">
+            <div id="game-window" class="win95-border popup">
                 <div class="title-bar drag-handle">
                     <span>MURENA_SLOT.exe</span>
                     <span class="btn-close" onclick="closeWindow('game-window')">X</span>
@@ -349,14 +390,14 @@
                 </div>
             </div>
 
-            <div id="browser-window" class="win95-border">
-                <div class="title-bar" id="browser-title-bar">
+            <div id="browser-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
+                <div class="title-bar drag-handle" id="browser-title-bar">
                     <span>studiomurena.net - Microsoft Internet Explorer</span>
                     <span class="btn-close" onclick="closeBrowser()">X</span>
                 </div>
                 <div class="browser-toolbar">
                     File &nbsp; Edit &nbsp; View &nbsp; Favorites &nbsp; Tools &nbsp; Help<br>
-                    <hr style="border-top: 1px solid #808080; border-bottom: 1px solid #fff; margin: 2px 0;">
+                    <hr style="border-top: 1px solid #808080; border-bottom: 1px solid #fff; margin: 4px 0;">
                     Address: <b>http://www.studiomurena.net</b>
                 </div>
                 
@@ -393,10 +434,6 @@
                                 <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
                                     <div class="static-face silhouette" style="background-image: url('assets/face-dutchnazari.png');"></div>
                                     <div class="artist-name">NET_04.dll</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-egreen.png');"></div>
-                                    <div class="artist-name">CMD_05.exe</div>
                                 </div>
                                 <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
                                     <div class="static-face silhouette" style="background-image: url('assets/face-enricogabrielli.png');"></div>
@@ -444,10 +481,10 @@
 
                         <div id="loading-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
                             <div class="title-bar drag-handle"><span>loading guest network...</span><span class="btn-close" onclick="closeWindow('loading-window')">X</span></div>
-                            <div class="mini-popup-content win95-border-inset" style="flex-direction: row; padding: 4px 8px; justify-content: flex-start; gap: 10px;">
-                                <img src="assets/loading.gif" class="custom-icon" alt="Loading..." style="margin: 0; width: 24px; height: 24px;">
+                            <div class="mini-popup-content win95-border-inset" style="flex-direction: row; padding: 6px 12px; justify-content: flex-start; gap: 15px;">
+                                <img src="assets/loading.gif" class="custom-icon" alt="Loading..." style="margin: 0; width: 32px; height: 32px;">
                                 <div style="display: flex; flex-direction: column; width: 100%; align-items: flex-start;">
-                                    <div class="mini-popup-text" style="margin-bottom: 4px; font-size: 10px;">Connecting to hidden channels...</div>
+                                    <div class="mini-popup-text" style="margin-bottom: 6px;">Connecting to hidden channels...</div>
                                     <div class="progress-bar-container win95-border-inset" style="margin: 0;"><div class="progress-bar-fill"></div></div>
                                 </div>
                             </div>
@@ -455,17 +492,17 @@
 
                         <div id="warning-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
                             <div class="title-bar drag-handle" style="background: var(--win-blue);"><span>WARNING: Hot_music.exe</span><span class="btn-close" onclick="closeWindow('warning-window')">X</span></div>
-                            <div class="mini-popup-content win95-border-inset" style="padding: 10px;">
-                                <img src="assets/alert.png" alt="Warning" style="width: 18px; height: 18px; margin-bottom: 6px;">
-                                <div class="mini-popup-text warning-text" style="font-size: 15px; line-height: 1.2;">PREPARE FOR A<br>SICK LIVE SHOW.</div>
+                            <div class="mini-popup-content win95-border-inset" style="padding: 15px;">
+                                <img src="assets/alert.png" alt="Warning" style="width: 24px; height: 24px; margin-bottom: 8px;">
+                                <div class="mini-popup-text warning-text" style="font-size: 14px; line-height: 1.3;">PREPARE FOR A<br>SICK LIVE SHOW.</div>
                             </div>
                         </div>
 
                         <div id="reveal-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
                             <div class="title-bar drag-handle"><span>Info</span><span class="btn-close" onclick="closeWindow('reveal-window')">X</span></div>
-                            <div class="mini-popup-content win95-border-inset" style="padding: 10px;">
-                                <img src="assets/info.png" alt="Info" style="width: 18px; height: 18px; margin-bottom: 6px; image-rendering: pixelated;">
-                                <div class="mini-popup-text" style="font-size: 15px; line-height: 1.2;">Guests are still<br>hidden.</div>
+                            <div class="mini-popup-content win95-border-inset" style="padding: 15px;">
+                                <img src="assets/info.png" alt="Info" style="width: 24px; height: 24px; margin-bottom: 8px; image-rendering: pixelated;">
+                                <div class="mini-popup-text" style="font-size: 14px; line-height: 1.3;">Guests are still<br>hidden.</div>
                             </div>
                         </div>
 
@@ -485,9 +522,8 @@
     <script>
         let isGlobalDragging = false;
         let highestZIndex = 110;
-        let glitchTimeout; // Variabile per gestire il timer del glitch
+        let glitchTimeout; 
 
-        // --- MOTORE DEL GIOCO E COLLEGAMENTO GOOGLE WEB APP ---
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyPDTQQC8DRlmyy_D8ZYnA95ezto5V_6891Sp9RceoqaCXAYxUGBB0KYtWRk9qEhLkr/exec';
         
         let boxesRevealed = 0;
@@ -503,19 +539,21 @@
             bringToFront(document.getElementById('game-window'));
         }
 
-        // Funzione per il cestino (apertura normale o glitchata in caso di collisione)
+        // Funzione per aprire la cartella OSPITI
+        function openOspiti() {
+            document.getElementById('ospiti-window').style.display = 'block';
+            bringToFront(document.getElementById('ospiti-window'));
+        }
+
         function openTrashWindow(isGlitch) {
             document.getElementById('trash-window').style.display = 'block';
             bringToFront(document.getElementById('trash-window'));
             
             const buffonImg = document.getElementById('buffon-img');
-            
-            // Pulisce qualsiasi timer precedente per evitare conflitti se ci droppano sopra di continuo
             clearTimeout(glitchTimeout);
             
             if (isGlitch) {
                 buffonImg.classList.add('buffon-glitch');
-                // Toglie il glitch dopo esattamente 2 secondi
                 glitchTimeout = setTimeout(() => {
                     buffonImg.classList.remove('buffon-glitch');
                 }, 2000);
@@ -604,11 +642,8 @@
             }, 6000);
         }
 
-        // Controllo collisione drag-and-drop sul cestino
         function checkTrashDrop(draggedEl) {
             const trashIcon = document.getElementById('icon-cestino');
-            
-            // Evitiamo che il cestino stesso o la finestra del cestino scatenino l'evento
             if (draggedEl.id === 'icon-cestino' || draggedEl.id === 'trash-window') return;
 
             const rect1 = draggedEl.getBoundingClientRect();
@@ -644,7 +679,7 @@
             function closeDragElement() { 
                 document.onmouseup = null; 
                 document.onmousemove = null; 
-                checkTrashDrop(element); // Controllo collisione al rilascio
+                checkTrashDrop(element); 
                 setTimeout(() => { isGlobalDragging = false; }, 50); 
             }
 
@@ -662,7 +697,7 @@
             function closeTouchDragElement() { 
                 document.ontouchend = null; 
                 document.ontouchmove = null; 
-                checkTrashDrop(element); // Controllo collisione al rilascio
+                checkTrashDrop(element); 
                 setTimeout(() => { isGlobalDragging = false; }, 50); 
             }
         }
@@ -676,7 +711,10 @@
         makeDraggable(document.getElementById("icon-fighter"), null); 
         makeDraggable(document.getElementById("icon-merch"), null); 
         makeDraggable(document.getElementById("icon-tickets"), null); 
+        makeDraggable(document.getElementById("icon-ospiti"), null); 
 
+        makeDraggable(document.getElementById("ospiti-window"), ".drag-handle");
+        makeDraggable(document.getElementById("browser-window"), ".drag-handle");
         makeDraggable(document.getElementById("artists-window"), ".drag-handle");
         makeDraggable(document.getElementById("warning-window"), ".drag-handle");
         makeDraggable(document.getElementById("loading-window"), ".drag-handle");
@@ -691,6 +729,7 @@
             closeWindow('dialup-window');
             closeWindow('game-window');
             closeWindow('trash-window');
+            closeWindow('ospiti-window');
             
             document.getElementById('taskbar-item').style.display = 'none';
             
@@ -714,13 +753,15 @@
             const desktopIcons = document.querySelectorAll('.desktop-icon');
             
             dialupWindow.style.display = 'block'; taskbarItem.style.display = 'flex'; taskbarItem.innerText = 'Dial-Up Connection';
-            
+            bringToFront(dialupWindow);
+
             setTimeout(() => { dialupText.innerText = "Verifying credentials..."; }, 600);
             setTimeout(() => { dialupText.innerText = "Bypassing mainframe..."; }, 1200);
             setTimeout(() => { dialupText.innerText = "Connected at 56,000 bps."; }, 1800);
             
             setTimeout(() => {
                 dialupWindow.style.display = 'none'; browserWindow.style.display = 'flex';
+                bringToFront(browserWindow);
                 taskbarItem.innerText = 'studiomurena.net - IE'; dialupText.innerText = "Dialing 555-MURENA...";
                 desktopIcons.forEach(icon => icon.style.display = 'none');
             }, 2200);
