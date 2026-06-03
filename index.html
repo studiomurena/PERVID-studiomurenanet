@@ -47,7 +47,6 @@
             box-shadow: inset 1px 1px 0 var(--win-dark);
         }
 
-        /* Trasformato per occupare tutto lo schermo desktop (rimosso max-width: 600px) */
         .windows-desktop {
             height: 100%; width: 100vw; 
             background-color: var(--teal); display: flex; flex-direction: column;
@@ -70,7 +69,6 @@
         .desktop-icon:active { background: rgba(255,255,255,0.2); border: 2px dotted white; }
         .icon-art { font-size: 48px; display: block; margin-bottom: 8px; pointer-events: none; }
 
-        /* Nuove coordinate per layout Desktop esteso */
         #icon-internet { top: 20px; left: 20px; }
         #icon-jazzcore { top: 140px; left: 20px; }
         #icon-cestino { top: 260px; left: 20px; }
@@ -93,11 +91,37 @@
 
         .popup { position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); display: flex; flex-direction: column; }
 
-        /* Stile Cartella Ospiti */
-        .folder-file { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; padding: 5px; border: 1px dotted transparent; }
-        .folder-file:active { border-color: var(--win-border-dark); background: #e0e0e0; }
+        /* --- LOGICA CARTELLA OSPITI CON FILE EXE CRIPTATI --- */
+        .folder-file { 
+            display: flex; flex-direction: column; align-items: center; text-align: center; 
+            cursor: pointer; padding: 8px; border: 1px dotted transparent;
+            transition: transform 0.2s ease-in-out;
+        }
         .folder-file img { width: 48px; height: 48px; image-rendering: pixelated; margin-bottom: 5px; }
-        .folder-file span { font-size: 11px; color: var(--win-dark); word-break: break-word; line-height: 1.2; font-family: 'MS Sans Serif', Tahoma, sans-serif; font-weight: bold;}
+        .folder-file span { 
+            font-size: 11px; color: var(--win-dark); word-break: break-word; 
+            line-height: 1.2; font-family: 'MS Sans Serif', Tahoma, sans-serif; font-weight: bold;
+        }
+
+        /* Stato Oscurato/Criptato */
+        .folder-file.locked img { filter: brightness(0); }
+        .folder-file.locked span { color: transparent; background: #000; text-shadow: none; }
+
+        /* Stato di Zoom Esplosivo al clic */
+        .folder-file.unlocked-zoom {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) scale(3.5) !important;
+            z-index: 99999 !important;
+            background: var(--win-gray) !important;
+            border: 2px solid var(--win-blue) !important;
+            box-shadow: 0px 0px 25px rgba(0,0,0,0.8) !important;
+            padding: 15px !important;
+            pointer-events: none;
+        }
+        .folder-file.unlocked-zoom img { filter: none !important; }
+        .folder-file.unlocked-zoom span { color: var(--win-dark) !important; background: transparent !important; }
 
         #dialup-window {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; z-index: 200;
@@ -110,25 +134,17 @@
             width: 70%; height: 85%; z-index: 50; flex-direction: column;
         }
         .browser-toolbar { padding: 4px; border-bottom: 2px solid var(--win-border-dark); font-size: 12px; }
-
         .browser-content {
-            background-color: var(--web-bg); 
-            flex-grow: 1; position: relative; overflow: hidden;
+            background-color: var(--web-bg); flex-grow: 1; position: relative; overflow: hidden;
             display: flex; flex-direction: column; padding: 4px;
         }
 
-        /* --- SEZIONE ALTA (HEADER) --- */
         .main-title {
-            flex-shrink: 0; margin: 10px auto; width: 100%; 
-            display: flex; justify-content: center; align-items: center;
+            flex-shrink: 0; margin: 10px auto; width: 100%; display: flex; justify-content: center; align-items: center;
             font-family: 'Press Start 2P', monospace; font-size: 4vw; text-transform: lowercase; 
-            white-space: nowrap; letter-spacing: -2px;
-            animation: colorCycleText 2s infinite alternate;
+            white-space: nowrap; letter-spacing: -2px; animation: colorCycleText 2s infinite alternate;
         }
-
-        @keyframes colorCycleText { 
-            0% { color: #000080; } 50% { color: #008080; } 100% { color: #000000; } 
-        }
+        @keyframes colorCycleText { 0% { color: #000080; } 50% { color: #008080; } 100% { color: #000000; } }
 
         .marquee-box {
             flex-shrink: 0; background: #000; color: #00ff00; padding: 2px; border: 2px solid #555; width: 100%;
@@ -137,23 +153,19 @@
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 10s linear infinite; font-size: 14px; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* IMPAGINAZIONE BOX EVENTO */
         .huge-event-box {
             flex-shrink: 0; background: #000; color: #fff; padding: 10px; margin-bottom: 10px; width: 100%;
-            border: 4px solid #fff; box-shadow: 4px 4px 0 var(--win-blue);
-            display: flex; flex-direction: row; align-items: center; justify-content: space-evenly;
+            border: 4px solid #fff; box-shadow: 4px 4px 0 var(--win-blue); display: flex; flex-direction: row; align-items: center; justify-content: space-evenly;
         }
         .event-left { font-size: min(3vw, 24px); color: #00ff00; letter-spacing: -1px; white-space: nowrap; }
         .event-divider { width: 2px; height: 30px; background-color: #808080; }
         .event-right { font-size: min(3.5vw, 28px); color: #ffcc00; letter-spacing: -1px; white-space: nowrap; font-weight: bold; }
 
-        /* --- WORKSPACE --- */
         .workspace {
             flex-grow: 1; min-height: 0; display: grid; gap: 4px; width: 100%;
             grid-template-columns: 1fr 1fr; grid-template-rows: auto auto minmax(0, 1fr); 
         }
 
-        /* GRIGLIA ARTISTI SITO */
         #artists-window { grid-column: 1 / -1; z-index: 105; }
         .artist-grid {
             background: var(--win-light); padding: 2px; flex-grow: 1;
@@ -168,18 +180,13 @@
 
         .static-face {
             width: 48px; height: 48px; margin-bottom: 2px; image-rendering: pixelated;
-            background-color: transparent; background-size: contain; 
-            background-position: center; background-repeat: no-repeat;
+            background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat;
         }
         .silhouette { filter: brightness(0); }
         .artist-name { color: var(--win-blue); text-decoration: underline; font-size: 11px; font-weight: bold; line-height: 1.2; }
         .custom-icon { width: 32px; height: 32px; image-rendering: pixelated; object-fit: contain; margin-bottom: 2px; }
 
-        /* POP-UP PICCOLI E NUOVO LAYOUT */
-        .mini-popup-content {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 4px; gap: 2px; flex-grow: 1; text-align: center;
-        }
+        .mini-popup-content { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px; gap: 2px; flex-grow: 1; text-align: center; }
         .mini-popup-text { font-size: 11px; font-weight: bold; line-height: 1.2; }
 
         #loading-window { grid-column: 1 / -1; z-index: 103; }
@@ -198,13 +205,11 @@
         .progress-bar-fill { height: 100%; background: var(--win-blue); width: 0%; animation: loading 4s infinite; }
         @keyframes loading { 0% { width: 0%; } 50% { width: 45%; } 100% { width: 45%; } }
 
-        /* --- FINESTRE DI GIOCO / CESTINO --- */
         #game-window, #trash-window {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 400px; z-index: 400; background: var(--win-gray);
         }
         .game-content { padding: 15px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        
         .game-input-area { margin-bottom: 15px; width: 100%; }
         .game-input-area input {
             width: 80%; padding: 5px; font-family: 'VGA 437', monospace; font-size: 14px;
@@ -216,50 +221,32 @@
         .slot-box {
             width: 50px; height: 50px; background: var(--win-light);
             border: 3px solid; border-color: var(--win-light) var(--win-border-dark) var(--win-border-dark) var(--win-light);
-            display: flex; justify-content: center; align-items: center; font-size: 28px;
-            cursor: pointer; user-select: none;
+            display: flex; justify-content: center; align-items: center; font-size: 28px; cursor: pointer; user-select: none;
         }
         .slot-box.revealed { border-color: var(--win-border-dark) var(--win-light) var(--win-light) var(--win-border-dark); background: #eee; cursor: default; }
-
         .game-msg { font-size: 14px; font-weight: bold; margin-bottom: 10px; color: var(--win-blue); min-height: 20px;}
         .btn-game { border: 2px solid; border-color: #fff #808080 #808080 #fff; background: var(--win-light); font-family: inherit; font-size: 14px; cursor: pointer; padding: 5px 15px; font-weight: bold; }
         .btn-game:active { border-color: #808080 #fff #fff #808080; }
 
-        /* --- EFFETTO GLITCH BUFFON --- */
         .buffon-glitch { animation: buffonFlash 0.15s infinite alternate, buffonShake 0.3s infinite; }
-        @keyframes buffonFlash {
-            0% { filter: invert(0) drop-shadow(0 0 0 red); }
-            50% { filter: invert(0.8) drop-shadow(5px 5px 0 magenta) hue-rotate(180deg); }
-            100% { filter: invert(1) drop-shadow(-5px -5px 0 cyan) hue-rotate(90deg); }
-        }
-        @keyframes buffonShake {
-            0% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(4px, -4px) scale(1.05); }
-            50% { transform: translate(-4px, 4px) scale(1.1); }
-            75% { transform: translate(-4px, -4px) scale(1.05); }
-            100% { transform: translate(4px, 4px) scale(1); }
-        }
+        @keyframes buffonFlash { 0% { filter: invert(0) drop-shadow(0 0 0 red); } 50% { filter: invert(0.8) drop-shadow(5px 5px 0 magenta) hue-rotate(180deg); } 100% { filter: invert(1) drop-shadow(-5px -5px 0 cyan) hue-rotate(90deg); } }
+        @keyframes buffonShake { 0% { transform: translate(0, 0) scale(1); } 25% { transform: translate(4px, -4px) scale(1.05); } 50% { transform: translate(-4px, 4px) scale(1.1); } 75% { transform: translate(-4px, -4px) scale(1.05); } 100% { transform: translate(4px, 4px) scale(1); } }
 
         /* --- TASKBAR --- */
-        .taskbar {
-            height: 35px; background: var(--win-gray); border-top: 2px solid var(--win-light);
-            display: flex; align-items: center; padding: 0 4px; flex-shrink: 0; z-index: 500; width: 100%;
-        }
-        .start-btn {
-            background: var(--win-gray); border-top: 2px solid var(--win-light); border-left: 2px solid var(--win-light);
-            border-right: 2px solid var(--win-dark); border-bottom: 2px solid var(--win-dark);
-            padding: 2px 6px; font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer;
-        }
+        .taskbar { height: 35px; background: var(--win-gray); border-top: 2px solid var(--win-light); display: flex; align-items: center; padding: 0 4px; flex-shrink: 0; z-index: 500; width: 100%; }
+        .start-btn { background: var(--win-gray); border-top: 2px solid var(--win-light); border-left: 2px solid var(--win-light); border-right: 2px solid var(--win-dark); border-bottom: 2px solid var(--win-dark); padding: 2px 6px; font-size: 13px; display: flex; align-items: center; gap: 4px; cursor: pointer; }
         .start-btn:active { border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark); }
-        .task-slot {
-            margin: 0 4px; border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark); border-style: solid; border-width: 2px;
-            flex-grow: 1; height: 22px; display: flex; align-items: center;
-            padding-left: 6px; font-size: 11px; white-space: nowrap; overflow: hidden;
-            background-color: var(--win-light); font-weight: bold;
-        }
-        .clock {
-            margin-left: auto; border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark); border-style: solid; border-width: 2px;
-            padding: 2px 6px; font-size: 11px;
+        .task-slot { margin: 0 4px; border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark); border-style: solid; border-width: 2px; flex-grow: 1; height: 22px; display: flex; align-items: center; padding-left: 6px; font-size: 11px; white-space: nowrap; overflow: hidden; background-color: var(--win-light); font-weight: bold; }
+        .clock { margin-left: auto; border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark); border-style: solid; border-width: 2px; padding: 2px 6px; font-size: 11px; }
+
+        /* --- CANVAS MATRIX OVERLAY --- */
+        #matrix-canvas {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 100000;
+            background: #000;
         }
     </style>
 </head>
@@ -300,43 +287,43 @@
                     <span>C:\WINDOWS\Desktop\OSPITI</span>
                     <span class="btn-close" onclick="closeWindow('ospiti-window')">X</span>
                 </div>
-                <div class="win95-border-inset" style="background: #fff; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; max-height: 400px; overflow-y: auto; margin: 4px;">
+                <div class="win95-border-inset" style="background: #fff; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 20px; max-height: 400px; overflow-y: auto; margin: 4px;">
                     
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-arya.png" alt="Arya">
-                        <span>ARYA</span>
+                        <span>ARYA.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-carlocorallo.png" alt="Carlo Corallo">
-                        <span>CARLO CORALLO</span>
+                        <span>CARLO_CORALLO.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-daykoda-sala.png" alt="Daykoda & Riccardo Sala">
-                        <span>DAYKODA &<br>R. SALA</span>
+                        <span>DAYKODA_SALA.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-silentbob.png" alt="Silent Bob">
-                        <span>SILENT BOB</span>
+                        <span>SILENT_BOB.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-jackthesmoker.png" alt="Jack The Smoker">
-                        <span>JACK THE SMOKER</span>
+                        <span>JACK_THE_SMOKER.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-sickbudd.png" alt="Sick Budd">
-                        <span>SICK BUDD</span>
+                        <span>SICK_BUDD.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-enricogabrielli.png" alt="Enrico Gabrielli">
-                        <span>ENRICO GABRIELLI</span>
+                        <span>ENRICO_GABRIELLI.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-freshmula.png" alt="Fresh Mula">
-                        <span>FRESH MULA</span>
+                        <span>FRESH_MULA.exe</span>
                     </div>
-                    <div class="folder-file">
+                    <div class="folder-file locked" onclick="unlockAndExecute(this)">
                         <img src="assets/face-dutchnazari.png" alt="Dutch Nazari">
-                        <span>DUTCH NAZARI</span>
+                        <span>DUTCH_NAZARI.exe</span>
                     </div>
 
                 </div>
@@ -366,7 +353,6 @@
                     <span class="btn-close" onclick="closeWindow('game-window')">X</span>
                 </div>
                 <div class="game-content win95-border-inset">
-                    
                     <div id="game-phase-1" class="game-input-area">
                         <div style="font-size: 36px; margin-bottom: 5px;">🎁</div>
                         <div style="font-size: 12px; font-weight: bold;">FIND 5 MATCHING ITEMS TO WIN!</div>
@@ -375,7 +361,6 @@
                         <br>
                         <button class="btn-game" onclick="startGame()">INITIATE SEQUENCE</button>
                     </div>
-
                     <div id="game-phase-2" style="display:none; width: 100%;">
                         <div class="game-msg" id="game-message">Decrypting boxes... click to open!</div>
                         <div class="slot-machine" id="slot-machine">
@@ -386,7 +371,6 @@
                             <div class="slot-box" onclick="revealBox(4)" id="box-4">?</div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -402,11 +386,8 @@
                 </div>
                 
                 <div class="browser-content">
-                    
                     <div class="main-title">studiomurena.net</div>
-                    
                     <div class="marquee-box"><span class="marquee-text">A SPECIAL JOURNEY WITH FRIENDS &nbsp;&nbsp;&nbsp; /// &nbsp;&nbsp;&nbsp; MILANO MAGNOLIA 18.06.2026</span></div>
-                    
                     <div class="huge-event-box">
                         <div class="event-left">📅 18/06/2026</div>
                         <div class="event-divider"></div>
@@ -414,72 +395,27 @@
                     </div>
 
                     <div class="workspace">
-                        
                         <div id="artists-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
                             <div class="title-bar drag-handle"><span>Guest List Explorer</span><span class="btn-close" onclick="closeWindow('artists-window')">X</span></div>
                             <div class="artist-grid win95-border-inset">
-                                
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-arya.png');"></div>
-                                    <div class="artist-name">USR_01.dat</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-carlocorallo.png');"></div>
-                                    <div class="artist-name">SYS_02.bin</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-daykoda.png');"></div>
-                                    <div class="artist-name">DRV_03.sys</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-dutchnazari.png');"></div>
-                                    <div class="artist-name">NET_04.dll</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-enricogabrielli.png');"></div>
-                                    <div class="artist-name">CFG_06.ini</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-freshmula.png');"></div>
-                                    <div class="artist-name">LOG_07.txt</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-ghemon.png');"></div>
-                                    <div class="artist-name">TMP_08.var</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-jackthesmoker.png');"></div>
-                                    <div class="artist-name">BOOT_9.sys</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-mezzosangue.png');"></div>
-                                    <div class="artist-name">ROOT_A.dir</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-riccardosala.png');"></div>
-                                    <div class="artist-name">MEM_B.dmp</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-sickbudd.png');"></div>
-                                    <div class="artist-name">ENC_C.key</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-silentbob.png');"></div>
-                                    <div class="artist-name">PRC_E.lib</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-williepeyote.png');"></div>
-                                    <div class="artist-name">RUN_F.bat</div>
-                                </div>
-                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')">
-                                    <div class="static-face silhouette" style="background-image: url('assets/face-unknown.png');"></div>
-                                    <div class="artist-name">ERR_G.raw</div>
-                                </div>
-
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-arya.png');"></div><div class="artist-name">USR_01.dat</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-carlocorallo.png');"></div><div class="artist-name">SYS_02.bin</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-daykoda.png');"></div><div class="artist-name">DRV_03.sys</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-dutchnazari.png');"></div><div class="artist-name">NET_04.dll</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-enricogabrielli.png');"></div><div class="artist-name">CFG_06.ini</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-freshmula.png');"></div><div class="artist-name">LOG_07.txt</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-ghemon.png');"></div><div class="artist-name">TMP_08.var</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-jackthesmoker.png');"></div><div class="artist-name">BOOT_9.sys</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-mezzosangue.png');"></div><div class="artist-name">ROOT_A.dir</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-riccardosala.png');"></div><div class="artist-name">MEM_B.dmp</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-sickbudd.png');"></div><div class="artist-name">ENC_C.key</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-silentbob.png');"></div><div class="artist-name">PRC_E.lib</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-williepeyote.png');"></div><div class="artist-name">RUN_F.bat</div></div>
+                                <div class="artist-item" onclick="alert('Access Denied: Decryption pending.')"><div class="static-face silhouette" style="background-image: url('assets/face-unknown.png');"></div><div class="artist-name">ERR_G.raw</div></div>
                             </div>
                         </div>
 
-                        <div id="loading-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
+                        <div id="loading-window" class="win95-border popup" onmousedown="bringToFront(this)">
                             <div class="title-bar drag-handle"><span>loading guest network...</span><span class="btn-close" onclick="closeWindow('loading-window')">X</span></div>
                             <div class="mini-popup-content win95-border-inset" style="flex-direction: row; padding: 6px 12px; justify-content: flex-start; gap: 15px;">
                                 <img src="assets/loading.gif" class="custom-icon" alt="Loading..." style="margin: 0; width: 32px; height: 32px;">
@@ -489,16 +425,14 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div id="warning-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
+                        <div id="warning-window" class="win95-border popup" onmousedown="bringToFront(this)">
                             <div class="title-bar drag-handle" style="background: var(--win-blue);"><span>WARNING: Hot_music.exe</span><span class="btn-close" onclick="closeWindow('warning-window')">X</span></div>
                             <div class="mini-popup-content win95-border-inset" style="padding: 15px;">
                                 <img src="assets/alert.png" alt="Warning" style="width: 24px; height: 24px; margin-bottom: 8px;">
                                 <div class="mini-popup-text warning-text" style="font-size: 14px; line-height: 1.3;">PREPARE FOR A<br>SICK LIVE SHOW.</div>
                             </div>
                         </div>
-
-                        <div id="reveal-window" class="win95-border popup" onmousedown="bringToFront(this)" ontouchstart="bringToFront(this)">
+                        <div id="reveal-window" class="win95-border popup" onmousedown="bringToFront(this)">
                             <div class="title-bar drag-handle"><span>Info</span><span class="btn-close" onclick="closeWindow('reveal-window')">X</span></div>
                             <div class="mini-popup-content win95-border-inset" style="padding: 15px;">
                                 <img src="assets/info.png" alt="Info" style="width: 24px; height: 24px; margin-bottom: 8px; image-rendering: pixelated;">
@@ -519,19 +453,81 @@
 
     </div>
 
+    <canvas id="matrix-canvas"></canvas>
+
     <script>
         let isGlobalDragging = false;
         let highestZIndex = 110;
         let glitchTimeout; 
 
+        // LOGICA DI SBLOCCO, ZOOM E ANIMAZIONE MATRIX CHRASH
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let matrixInterval;
+
+        function startMatrixRain() {
+            canvas.style.display = 'block';
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const numbers = "0123456789010101";
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = Array(Math.floor(columns)).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00ff00';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = numbers.charAt(Math.floor(Math.random() * numbers.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            }
+            matrixInterval = setInterval(draw, 30);
+        }
+
+        function stopMatrixRain() {
+            clearInterval(matrixInterval);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.display = 'none';
+        }
+
+        function unlockAndExecute(element) {
+            if (element.classList.contains('unlocked-zoom')) return;
+
+            // 1. Rimuovi oscuramento e applica lo Zoom gigante fisso al centro
+            element.classList.remove('locked');
+            element.classList.add('unlocked-zoom');
+
+            // 2. Aspetta 600ms (il tempo di far vedere la faccia zoomata) e lancia Matrix per 2 secondi
+            setTimeout(() => {
+                startMatrixRain();
+
+                setTimeout(() => {
+                    stopMatrixRain();
+                    
+                    // 3. Hard Reset totale di tutto il desktop da zero
+                    resetDesktop();
+                }, 2000);
+
+            }, 600);
+        }
+
+        // --- MOTORE DEL GIOCO E COLLEGAMENTO GOOGLE WEB APP ---
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyPDTQQC8DRlmyy_D8ZYnA95ezto5V_6891Sp9RceoqaCXAYxUGBB0KYtWRk9qEhLkr/exec';
-        
         let boxesRevealed = 0;
         let playerEmail = "";
         let currentWinningItem = "";
         let currentWinningName = "";
         let currentWinningIcon = "";
-        
         const randomIcons = ["🐉", "🖼️", "💿", "📜", "🏷️"]; 
 
         function openGame() {
@@ -539,7 +535,6 @@
             bringToFront(document.getElementById('game-window'));
         }
 
-        // Funzione per aprire la cartella OSPITI
         function openOspiti() {
             document.getElementById('ospiti-window').style.display = 'block';
             bringToFront(document.getElementById('ospiti-window'));
@@ -548,15 +543,11 @@
         function openTrashWindow(isGlitch) {
             document.getElementById('trash-window').style.display = 'block';
             bringToFront(document.getElementById('trash-window'));
-            
             const buffonImg = document.getElementById('buffon-img');
             clearTimeout(glitchTimeout);
-            
             if (isGlitch) {
                 buffonImg.classList.add('buffon-glitch');
-                glitchTimeout = setTimeout(() => {
-                    buffonImg.classList.remove('buffon-glitch');
-                }, 2000);
+                glitchTimeout = setTimeout(() => { buffonImg.classList.remove('buffon-glitch'); }, 2000);
             } else {
                 buffonImg.classList.remove('buffon-glitch');
             }
@@ -564,12 +555,8 @@
 
         function startGame() {
             const emailInput = document.getElementById('player-email').value;
-            if (!emailInput || !emailInput.includes('@')) {
-                alert("ERR: INSERIRE EMAIL VALIDA.");
-                return;
-            }
+            if (!emailInput || !emailInput.includes('@')) { alert("ERR: INSERIRE EMAIL VALIDA."); return; }
             playerEmail = emailInput;
-            
             document.getElementById('game-phase-1').style.display = 'none';
             document.getElementById('game-phase-2').style.display = 'flex';
             document.getElementById('slot-machine').style.display = 'none';
@@ -577,86 +564,47 @@
             msgBox.innerText = "Connecting to Murena Server... Please wait.";
             msgBox.style.color = "var(--win-blue)";
 
-            const urlConEmail = scriptURL + "?email=" + encodeURIComponent(playerEmail);
-
-            fetch(urlConEmail)
+            fetch(scriptURL + "?email=" + encodeURIComponent(playerEmail))
                 .then(response => response.json())
                 .then(data => {
-                    currentWinningItem = data.id;
-                    currentWinningName = data.nome;
-                    currentWinningIcon = data.icon;
-                    
+                    currentWinningItem = data.id; currentWinningName = data.nome; currentWinningIcon = data.icon;
                     msgBox.innerText = "Access Granted! Decrypting boxes... click to open!";
                     document.getElementById('slot-machine').style.display = 'flex';
                 })
                 .catch(error => {
-                    msgBox.innerText = "SYS_ERR: Server offline. Riprova più tardi.";
-                    msgBox.style.color = "red";
-                    setTimeout(() => {
-                        document.getElementById('game-phase-1').style.display = 'block';
-                        document.getElementById('game-phase-2').style.display = 'none';
-                    }, 4000);
+                    msgBox.innerText = "SYS_ERR: Server offline. Riprova più tardi."; msgBox.style.color = "red";
+                    setTimeout(() => { document.getElementById('game-phase-1').style.display = 'block'; document.getElementById('game-phase-2').style.display = 'none'; }, 4000);
                 });
         }
 
         function revealBox(index) {
             const box = document.getElementById('box-' + index);
             if (box.classList.contains('revealed')) return;
-            
             let displayIcon = currentWinningIcon;
-            if (currentWinningItem === "lose") {
-                displayIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-            }
-
-            box.innerText = displayIcon;
-            box.classList.add('revealed');
-            boxesRevealed++;
-
-            if (boxesRevealed === 5) {
-                setTimeout(checkWin, 500);
-            }
+            if (currentWinningItem === "lose") displayIcon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
+            box.innerText = displayIcon; box.classList.add('revealed'); boxesRevealed++;
+            if (boxesRevealed === 5) setTimeout(checkWin, 500);
         }
 
         function checkWin() {
             const msgBox = document.getElementById('game-message');
             if (currentWinningItem === "lose") {
-                msgBox.style.color = "red";
-                msgBox.innerText = "SISTEMA: NESSUN MATCH TROVATO. Ritenta!";
+                msgBox.style.color = "red"; msgBox.innerText = "SISTEMA: NESSUN MATCH TROVATO. Ritenta!";
             } else {
-                msgBox.style.color = "green";
-                msgBox.innerText = `JACKPOT! HAI VINTO:\n${currentWinningName}!\nControlla la mail.`;
+                msgBox.style.color = "green"; msgBox.innerText = `JACKPOT! HAI VINTO:\n${currentWinningName}!\nControlla la mail.`;
             }
-            
             setTimeout(() => {
-                boxesRevealed = 0;
-                document.getElementById('game-phase-1').style.display = 'block';
-                document.getElementById('game-phase-2').style.display = 'none';
-                document.getElementById('slot-machine').style.display = 'none';
-                document.getElementById('game-message').innerText = "Decrypting boxes... click to open!";
-                document.getElementById('game-message').style.color = "var(--win-blue)";
-                for(let i=0; i<5; i++) {
-                    const box = document.getElementById('box-'+i);
-                    box.innerText = "?";
-                    box.classList.remove('revealed');
-                }
+                boxesRevealed = 0; document.getElementById('game-phase-1').style.display = 'block'; document.getElementById('game-phase-2').style.display = 'none'; document.getElementById('slot-machine').style.display = 'none'; document.getElementById('game-message').innerText = "Decrypting boxes... click to open!"; document.getElementById('game-message').style.color = "var(--win-blue)";
+                for(let i=0; i<5; i++) { const box = document.getElementById('box-'+i); box.innerText = "?"; box.classList.remove('revealed'); }
             }, 6000);
         }
 
         function checkTrashDrop(draggedEl) {
             const trashIcon = document.getElementById('icon-cestino');
             if (draggedEl.id === 'icon-cestino' || draggedEl.id === 'trash-window') return;
-
-            const rect1 = draggedEl.getBoundingClientRect();
-            const rect2 = trashIcon.getBoundingClientRect();
-            
-            const overlap = !(rect1.right < rect2.left || 
-                              rect1.left > rect2.right || 
-                              rect1.bottom < rect2.top || 
-                              rect1.top > rect2.bottom);
-            
-            if (overlap) {
-                openTrashWindow(true);
-            }
+            const rect1 = draggedEl.getBoundingClientRect(); const rect2 = trashIcon.getBoundingClientRect();
+            const overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+            if (overlap) openTrashWindow(true);
         }
 
         function makeDraggable(element, handleSelector) {
@@ -665,41 +613,12 @@
             if (!handle) return;
             handle.onmousedown = dragMouseDown; handle.ontouchstart = dragTouchStart;
 
-            function dragMouseDown(e) {
-                e = e || window.event; pos3 = e.clientX; pos4 = e.clientY;
-                document.onmouseup = closeDragElement; document.onmousemove = elementDrag;
-                bringToFront(element);
-            }
-            function elementDrag(e) {
-                e = e || window.event; e.preventDefault(); isGlobalDragging = true;
-                pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY;
-                element.style.top = (element.offsetTop - pos2) + "px";
-                element.style.left = (element.offsetLeft - pos1) + "px";
-            }
-            function closeDragElement() { 
-                document.onmouseup = null; 
-                document.onmousemove = null; 
-                checkTrashDrop(element); 
-                setTimeout(() => { isGlobalDragging = false; }, 50); 
-            }
-
-            function dragTouchStart(e) {
-                e = e || window.event; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY;
-                document.ontouchend = closeTouchDragElement; document.ontouchmove = elementTouchDrag;
-                bringToFront(element);
-            }
-            function elementTouchDrag(e) {
-                e = e || window.event; if(e.cancelable) e.preventDefault(); isGlobalDragging = true;
-                pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY;
-                element.style.top = (element.offsetTop - pos2) + "px";
-                element.style.left = (element.offsetLeft - pos1) + "px";
-            }
-            function closeTouchDragElement() { 
-                document.ontouchend = null; 
-                document.ontouchmove = null; 
-                checkTrashDrop(element); 
-                setTimeout(() => { isGlobalDragging = false; }, 50); 
-            }
+            function dragMouseDown(e) { e = e || window.event; pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; bringToFront(element); }
+            function elementDrag(e) { e = e || window.event; e.preventDefault(); isGlobalDragging = true; pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; element.style.top = (element.offsetTop - pos2) + "px"; element.style.left = (element.offsetLeft - pos1) + "px"; }
+            function closeDragElement() { document.onmouseup = null; document.onmousemove = null; checkTrashDrop(element); setTimeout(() => { isGlobalDragging = false; }, 50); }
+            function dragTouchStart(e) { e = e || window.event; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; document.ontouchend = closeTouchDragElement; document.ontouchmove = elementTouchDrag; bringToFront(element); }
+            function elementTouchDrag(e) { e = e || window.event; if(e.cancelable) e.preventDefault(); isGlobalDragging = true; pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY; pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY; element.style.top = (element.offsetTop - pos2) + "px"; element.style.left = (element.offsetLeft - pos1) + "px"; }
+            function closeTouchDragElement() { document.ontouchend = null; document.ontouchmove = null; checkTrashDrop(element); setTimeout(() => { isGlobalDragging = false; }, 50); }
         }
 
         function bringToFront(element) { highestZIndex += 1; element.style.zIndex = highestZIndex; }
@@ -724,6 +643,7 @@
 
         function closeWindow(id) { document.getElementById(id).style.display = 'none'; }
 
+        // RESET COMPLETO DA ZERO DEL DESKTOP
         function resetDesktop() {
             closeWindow('browser-window');
             closeWindow('dialup-window');
@@ -734,9 +654,13 @@
             document.getElementById('taskbar-item').style.display = 'none';
             
             document.querySelectorAll('.desktop-icon').forEach(icon => {
-                if(icon.id !== 'icon-game') {
-                    icon.style.display = 'block';
-                }
+                if(icon.id !== 'icon-game') icon.style.display = 'block';
+            });
+
+            // Ripristina lo stato locked e ripulisce le classi di zoom per tutti i file degli ospiti
+            document.querySelectorAll('.folder-file').forEach(file => {
+                file.classList.remove('unlocked-zoom');
+                file.classList.add('locked');
             });
 
             document.getElementById('artists-window').style.display = 'flex';
@@ -771,9 +695,7 @@
             document.getElementById('browser-window').style.display = 'none';
             document.getElementById('taskbar-item').style.display = 'none';
             document.querySelectorAll('.desktop-icon').forEach(icon => {
-                if(icon.id !== 'icon-game') {
-                    icon.style.display = 'block';
-                }
+                if(icon.id !== 'icon-game') icon.style.display = 'block';
             });
         }
 
