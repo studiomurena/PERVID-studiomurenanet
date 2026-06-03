@@ -91,7 +91,7 @@
 
         .popup { position: relative; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); display: flex; flex-direction: column; }
 
-        /* --- LOGICA CARTELLA OSPITI CON FILE EXE CRIPTATI --- */
+        /* --- CARTELLA OSPITI E LOGICA ZOOM --- */
         .folder-file { 
             display: flex; flex-direction: column; align-items: center; text-align: center; 
             cursor: pointer; padding: 8px; border: 1px dotted transparent;
@@ -460,7 +460,7 @@
         let highestZIndex = 110;
         let glitchTimeout; 
 
-        // LOGICA DI SBLOCCO, ZOOM E ANIMAZIONE MATRIX CHRASH
+        // LOGICA DI SBLOCCO, ZOOM E ANIMAZIONE MATRIX CRASH
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         let matrixInterval;
@@ -503,14 +503,15 @@
         function unlockAndExecute(element) {
             if (element.classList.contains('unlocked-zoom')) return;
 
-            // 1. Rimuovi oscuramento e applica lo Zoom gigante fisso al centro
+            // 1. Rimuovi oscuramento e applica lo Zoom gigante fisso al centro dello schermo
             element.classList.remove('locked');
             element.classList.add('unlocked-zoom');
 
-            // 2. Aspetta 600ms (il tempo di far vedere la faccia zoomata) e lancia Matrix per 2 secondi
+            // 2. Allungato a 2500ms (2.5s): tempo in cui l'icona sbloccata a specchio e zoomata rimane visibile
             setTimeout(() => {
                 startMatrixRain();
 
+                // La pioggia di numeri dura i classici 2 secondi prima del reboot
                 setTimeout(() => {
                     stopMatrixRain();
                     
@@ -518,7 +519,7 @@
                     resetDesktop();
                 }, 2000);
 
-            }, 600);
+            }, 2500); // <-- Cambiato da 600 a 2500 millisecondi
         }
 
         // --- MOTORE DEL GIOCO E COLLEGAMENTO GOOGLE WEB APP ---
@@ -643,7 +644,7 @@
 
         function closeWindow(id) { document.getElementById(id).style.display = 'none'; }
 
-        // RESET COMPLETO DA ZERO DEL DESKTOP
+        // RESET COMPLETO DEL DESKTOP
         function resetDesktop() {
             closeWindow('browser-window');
             closeWindow('dialup-window');
@@ -657,7 +658,7 @@
                 if(icon.id !== 'icon-game') icon.style.display = 'block';
             });
 
-            // Ripristina lo stato locked e ripulisce le classi di zoom per tutti i file degli ospiti
+            // Ripristina lo stato locked iniziale per tutti i file degli ospiti
             document.querySelectorAll('.folder-file').forEach(file => {
                 file.classList.remove('unlocked-zoom');
                 file.classList.add('locked');
